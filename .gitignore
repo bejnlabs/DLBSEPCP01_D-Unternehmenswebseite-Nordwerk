@@ -1,0 +1,22 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+override.tf
+override.tf.json
+**/function.zip
+
+# Die Sperrdatei bleibt bewusst versioniert: sie fixiert die
+# Providerversion und sichert damit die Reproduzierbarkeit.
+!.terraform.lock.hcl
+
+# Python
+__pycache__/
+.venv/
+local.settings.json
+
+# System
+.DS_Store
+Thumbs.db
