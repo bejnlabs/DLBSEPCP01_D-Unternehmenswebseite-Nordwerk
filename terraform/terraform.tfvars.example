@@ -1,0 +1,13 @@
+# Beispielwerte. Vor dem ersten Einsatz nach terraform.tfvars kopieren
+# und anpassen. Die eigentliche Datei ist von der Versionsverwaltung
+# ausgeschlossen.
+
+project_name = "nordwerk"
+environment  = "dev"
+course_id    = "DLBSEPCP01"
+location     = "germanywestcentral"
+
+replication_type     = "ZRS"
+versioning_enabled   = true
+retention_days       = 7
+deploy_observability = true

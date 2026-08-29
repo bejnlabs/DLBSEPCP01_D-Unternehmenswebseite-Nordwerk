@@ -1,22 +1,24 @@
 output "resource_group_name" {
-  value = azurerm_resource_group.main.name
+  description = "Name der Ressourcengruppe"
+  value       = azurerm_resource_group.main.name
 }
 
 output "storage_account_name" {
-  value = module.static_site.storage_account_name
+  description = "Name des Speicherkontos"
+  value       = module.static_site.storage_account_name
 }
 
-output "origin_url" {
-  description = "Direkter Endpunkt des Speicherkontos, nur zur Kontrolle"
+output "website_url" {
+  description = "Oeffentliche Adresse der Website"
   value       = module.static_site.primary_web_endpoint
 }
 
-output "function_url" {
-  description = "Endpunkt der Zaehlerfunktion"
-  value       = var.deploy_backend ? "https://${module.backend_api[0].default_hostname}/api/counter" : "nicht bereitgestellt"
+output "replication_type" {
+  description = "Tatsaechlich gesetzte Replikationsart"
+  value       = module.static_site.replication_type
 }
 
-output "public_url" {
-  description = "Oeffentliche Adresse ueber die Edge-Schicht"
-  value       = var.deploy_edge ? module.edge[0].endpoint_url : "nicht bereitgestellt"
+output "log_analytics_workspace" {
+  description = "Name des Arbeitsbereichs fuer die Betriebsueberwachung"
+  value       = var.deploy_observability ? module.observability[0].workspace_name : "nicht bereitgestellt"
 }

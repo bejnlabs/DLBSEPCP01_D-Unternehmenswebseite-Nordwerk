@@ -14,6 +14,21 @@ variable "website_source_path" {
   type        = string
 }
 
+variable "versioning_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "retention_days" {
+  type    = number
+  default = 7
+}
+
+variable "old_version_expiry_days" {
+  type    = number
+  default = 30
+}
+
 variable "tags" {
   type    = map(string)
   default = {}

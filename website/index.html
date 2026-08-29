@@ -4,58 +4,47 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Nordwerk Präzisionstechnik GmbH</title>
-  <style>
-    :root { --fg:#1d1d1f; --muted:#575e62; --line:#e0e0e3; }
-    * { box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-           color: var(--fg); margin: 0; line-height: 1.6; }
-    .wrap { max-width: 46rem; margin: 0 auto; padding: 4rem 1.5rem; }
-    h1 { font-size: 2rem; margin: 0 0 .3rem; }
-    .sub { color: var(--muted); margin: 0 0 2.5rem; }
-    h2 { font-size: 1.1rem; margin: 2.5rem 0 .6rem; }
-    ul { padding-left: 1.2rem; }
-    footer { border-top: 1px solid var(--line); margin-top: 3rem;
-             padding-top: 1.2rem; color: var(--muted); font-size: .9rem; }
-    #counter { font-variant-numeric: tabular-nums; font-weight: 600; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
+  <header class="wrap">
     <h1>Nordwerk Präzisionstechnik GmbH</h1>
     <p class="sub">Sondermaschinenbau für die Verpackungsindustrie</p>
+  </header>
 
-    <h2>Leistungen</h2>
-    <ul>
-      <li>Sondermaschinen für Primär- und Sekundärverpackung</li>
-      <li>Retrofit und Modernisierung bestehender Anlagen</li>
-      <li>Inbetriebnahme und Service weltweit</li>
-    </ul>
+  <main class="wrap">
+    <section>
+      <h2>Leistungen</h2>
+      <ul>
+        <li>Sondermaschinen für Primär- und Sekundärverpackung</li>
+        <li>Retrofit und Modernisierung bestehender Anlagen</li>
+        <li>Inbetriebnahme und Service weltweit</li>
+      </ul>
+    </section>
 
-    <h2>Kontakt</h2>
-    <p>Handelsvertretungen in neun Ländern. Anfragen über die Vertriebsleitung.</p>
+    <section>
+      <h2>Referenzen</h2>
+      <p>
+        Anlagen im Einsatz bei Herstellern der Lebensmittel-, Pharma- und
+        Kosmetikindustrie in neun Ländern.
+      </p>
+    </section>
 
-    <footer>
-      Diese Seite wird aus Azure Blob Storage ausgeliefert und über
-      Azure Front Door am Netzrand zwischengespeichert.<br>
-      Seitenaufrufe: <span id="counter">wird geladen …</span>
-    </footer>
-  </div>
+    <section>
+      <h2>Kontakt</h2>
+      <p>
+        Handelsvertretungen in neun Ländern. Anfragen über die
+        Vertriebsleitung.
+      </p>
+    </section>
+  </main>
 
-  <script>
-    // Der Zaehler laeuft ueber denselben Ursprung wie die Seite.
-    // Front Door leitet /api/* an die Function App weiter, sodass keine
-    // ursprungsuebergreifende Anfrage entsteht.
-    (async () => {
-      const el = document.getElementById('counter');
-      try {
-        const res = await fetch('/api/counter', { cache: 'no-store' });
-        if (!res.ok) throw new Error(res.status);
-        const data = await res.json();
-        el.textContent = data.count.toLocaleString('de-DE');
-      } catch (err) {
-        el.textContent = 'derzeit nicht verfügbar';
-      }
-    })();
-  </script>
+  <footer class="wrap">
+    <p>
+      Diese Seite wird aus einem zonenredundanten Azure-Speicherkonto
+      ausgeliefert. Die Bereitstellung erfolgt vollständig über
+      Infrastructure as Code (IaC).
+    </p>
+  </footer>
 </body>
 </html>

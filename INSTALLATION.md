@@ -1,9 +1,7 @@
 # Installationsanleitung
-
 Reproduziert die vollständige Umgebung aus dem Quellcode.
 
 ## Voraussetzungen
-
 - Terraform ab 1.5
 - Azure CLI ab 2.60
 - Ein Azure-Abonnement mit Berechtigung zum Anlegen von Ressourcen
@@ -21,7 +19,6 @@ az account show
 Die Ausgabe enthält unter `id` die Abonnementkennung.
 
 ### 2 Abonnementkennung setzen
-
 ```powershell
 $env:ARM_SUBSCRIPTION_ID = "<Abonnementkennung>"
 ```
@@ -35,13 +32,12 @@ Nur für die laufende Sitzung. Dauerhaft:
 Die Kennung wird bewusst nicht im Projektverzeichnis abgelegt.
 
 ### 3 Werte anpassen
-
 Im Verzeichnis `terraform` eine Datei `terraform.tfvars` anlegen:
 
 ```hcl
 project_name = "cloudportfolio"
 environment  = "dev"
-course_id    = "DEIN-KURSKUERZEL"
+course_id    = "KURSKUERZEL"
 location     = "germanywestcentral"
 
 deploy_backend = true
@@ -51,7 +47,6 @@ deploy_edge    = false
 `terraform.tfvars` ist von der Versionsverwaltung ausgeschlossen.
 
 ### 4 Bereitstellen
-
 ```powershell
 cd terraform
 terraform init
@@ -61,7 +56,6 @@ terraform apply
 ```
 
 ### 5 Prüfen
-
 ```powershell
 terraform output
 ```
@@ -71,7 +65,6 @@ terraform output
 - `public_url` steht erst zur Verfügung, wenn `deploy_edge = true`
 
 ### 6 Edge-Schicht zuschalten
-
 Azure Front Door verursacht eine Grundgebühr von rund 35 US-Dollar
 je Monat, unabhängig vom Verkehr. Daher standardmäßig abgeschaltet.
 
@@ -83,7 +76,6 @@ Nach dem Anlegen dauert es einige Minuten, bis die Konfiguration im
 Edge-Netz verteilt ist. Ein Fehler beim ersten Aufruf ist normal.
 
 ### 7 Abbauen
-
 ```powershell
 terraform destroy
 ```
@@ -92,7 +84,6 @@ Entfernt die gesamte Ressourcengruppe. Nach dem Nachweis zwingend
 ausführen, sonst laufen die Kosten weiter.
 
 ## Bekannte Stolpersteine
-
 | Meldung | Ursache | Abhilfe |
 |---|---|---|
 | `RequestDisallowedByAzure` | Region durch Abonnementrichtlinie gesperrt | andere Region in `terraform.tfvars` setzen |

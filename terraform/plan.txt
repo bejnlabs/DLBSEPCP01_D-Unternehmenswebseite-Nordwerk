@@ -1,0 +1,385 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [32m+[0m create[0m
+
+Terraform will perform the following actions:
+
+[1m  # azurerm_resource_group.main[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_resource_group" "main" {
+      [32m+[0m[0m id       = (known after apply)
+      [32m+[0m[0m location = "germanywestcentral"
+      [32m+[0m[0m name     = "rg-nordwerk-dev"
+      [32m+[0m[0m tags     = {
+          [32m+[0m[0m "course"      = "DLBSEPCP01"
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "managed_by"  = "terraform"
+          [32m+[0m[0m "project"     = "nordwerk"
+        }
+    }
+
+[1m  # random_string.suffix[0m will be created
+[0m  [32m+[0m[0m resource "random_string" "suffix" {
+      [32m+[0m[0m id          = (known after apply)
+      [32m+[0m[0m length      = 6
+      [32m+[0m[0m lower       = true
+      [32m+[0m[0m min_lower   = 0
+      [32m+[0m[0m min_numeric = 0
+      [32m+[0m[0m min_special = 0
+      [32m+[0m[0m min_upper   = 0
+      [32m+[0m[0m number      = true
+      [32m+[0m[0m numeric     = true
+      [32m+[0m[0m result      = (known after apply)
+      [32m+[0m[0m special     = false
+      [32m+[0m[0m upper       = false
+    }
+
+[1m  # module.observability[0].azurerm_log_analytics_workspace.this[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_log_analytics_workspace" "this" {
+      [32m+[0m[0m allow_resource_only_permissions = true
+      [32m+[0m[0m daily_quota_gb                  = -1
+      [32m+[0m[0m id                              = (known after apply)
+      [32m+[0m[0m internet_ingestion_enabled      = true
+      [32m+[0m[0m internet_query_enabled          = true
+      [32m+[0m[0m local_authentication_disabled   = (known after apply)
+      [32m+[0m[0m local_authentication_enabled    = true
+      [32m+[0m[0m location                        = "germanywestcentral"
+      [32m+[0m[0m name                            = (known after apply)
+      [32m+[0m[0m primary_shared_key              = (sensitive value)
+      [32m+[0m[0m resource_group_name             = "rg-nordwerk-dev"
+      [32m+[0m[0m retention_in_days               = 30
+      [32m+[0m[0m secondary_shared_key            = (sensitive value)
+      [32m+[0m[0m sku                             = "PerGB2018"
+      [32m+[0m[0m tags                            = {
+          [32m+[0m[0m "course"      = "DLBSEPCP01"
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "managed_by"  = "terraform"
+          [32m+[0m[0m "project"     = "nordwerk"
+        }
+      [32m+[0m[0m workspace_id                    = (known after apply)
+    }
+
+[1m  # module.observability[0].azurerm_monitor_action_group.ops[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_monitor_action_group" "ops" {
+      [32m+[0m[0m enabled             = true
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m location            = "global"
+      [32m+[0m[0m name                = (known after apply)
+      [32m+[0m[0m resource_group_name = "rg-nordwerk-dev"
+      [32m+[0m[0m short_name          = "betrieb"
+      [32m+[0m[0m tags                = {
+          [32m+[0m[0m "course"      = "DLBSEPCP01"
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "managed_by"  = "terraform"
+          [32m+[0m[0m "project"     = "nordwerk"
+        }
+    }
+
+[1m  # module.observability[0].azurerm_monitor_diagnostic_setting.blob[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_monitor_diagnostic_setting" "blob" {
+      [32m+[0m[0m id                             = (known after apply)
+      [32m+[0m[0m log_analytics_destination_type = (known after apply)
+      [32m+[0m[0m log_analytics_workspace_id     = (known after apply)
+      [32m+[0m[0m name                           = "diag-blob"
+      [32m+[0m[0m target_resource_id             = (known after apply)
+
+      [32m+[0m[0m enabled_log {
+          [32m+[0m[0m category       = "StorageRead"
+            [90m# (1 unchanged attribute hidden)[0m[0m
+        }
+
+      [32m+[0m[0m enabled_metric {
+          [32m+[0m[0m category = "Transaction"
+        }
+
+      [32m+[0m[0m metric (known after apply)
+    }
+
+[1m  # module.observability[0].azurerm_monitor_metric_alert.server_errors[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_monitor_metric_alert" "server_errors" {
+      [32m+[0m[0m auto_mitigate            = true
+      [32m+[0m[0m description              = "Meldet einen Anstieg serverseitiger Fehler bei der Auslieferung."
+      [32m+[0m[0m enabled                  = true
+      [32m+[0m[0m frequency                = "PT5M"
+      [32m+[0m[0m id                       = (known after apply)
+      [32m+[0m[0m name                     = "alert-serverfehler"
+      [32m+[0m[0m resource_group_name      = "rg-nordwerk-dev"
+      [32m+[0m[0m scopes                   = (known after apply)
+      [32m+[0m[0m severity                 = 2
+      [32m+[0m[0m tags                     = {
+          [32m+[0m[0m "course"      = "DLBSEPCP01"
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "managed_by"  = "terraform"
+          [32m+[0m[0m "project"     = "nordwerk"
+        }
+      [32m+[0m[0m target_resource_location = (known after apply)
+      [32m+[0m[0m target_resource_type     = (known after apply)
+      [32m+[0m[0m window_size              = "PT15M"
+
+      [32m+[0m[0m action {
+          [32m+[0m[0m action_group_id = (known after apply)
+        }
+
+      [32m+[0m[0m criteria {
+          [32m+[0m[0m aggregation            = "Total"
+          [32m+[0m[0m metric_name            = "Transactions"
+          [32m+[0m[0m metric_namespace       = "Microsoft.Storage/storageAccounts/blobServices"
+          [32m+[0m[0m operator               = "GreaterThan"
+          [32m+[0m[0m skip_metric_validation = false
+          [32m+[0m[0m threshold              = 10
+
+          [32m+[0m[0m dimension {
+              [32m+[0m[0m name     = "ResponseType"
+              [32m+[0m[0m operator = "Include"
+              [32m+[0m[0m values   = [
+                  [32m+[0m[0m "ServerOtherError",
+                  [32m+[0m[0m "ServerTimeoutError",
+                ]
+            }
+        }
+    }
+
+[1m  # module.static_site.azurerm_storage_account.this[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_storage_account" "this" {
+      [32m+[0m[0m access_tier                        = (known after apply)
+      [32m+[0m[0m account_kind                       = "StorageV2"
+      [32m+[0m[0m account_replication_type           = "ZRS"
+      [32m+[0m[0m account_tier                       = "Standard"
+      [32m+[0m[0m allow_nested_items_to_be_public    = false
+      [32m+[0m[0m cross_tenant_replication_enabled   = false
+      [32m+[0m[0m default_to_oauth_authentication    = true
+      [32m+[0m[0m dns_endpoint_type                  = "Standard"
+      [32m+[0m[0m https_traffic_only_enabled         = true
+      [32m+[0m[0m id                                 = (known after apply)
+      [32m+[0m[0m infrastructure_encryption_enabled  = false
+      [32m+[0m[0m is_hns_enabled                     = false
+      [32m+[0m[0m large_file_share_enabled           = (known after apply)
+      [32m+[0m[0m local_user_enabled                 = true
+      [32m+[0m[0m location                           = "germanywestcentral"
+      [32m+[0m[0m min_tls_version                    = "TLS1_2"
+      [32m+[0m[0m name                               = (known after apply)
+      [32m+[0m[0m nfsv3_enabled                      = false
+      [32m+[0m[0m primary_access_key                 = (sensitive value)
+      [32m+[0m[0m primary_blob_connection_string     = (sensitive value)
+      [32m+[0m[0m primary_blob_endpoint              = (known after apply)
+      [32m+[0m[0m primary_blob_host                  = (known after apply)
+      [32m+[0m[0m primary_blob_internet_endpoint     = (known after apply)
+      [32m+[0m[0m primary_blob_internet_host         = (known after apply)
+      [32m+[0m[0m primary_blob_microsoft_endpoint    = (known after apply)
+      [32m+[0m[0m primary_blob_microsoft_host        = (known after apply)
+      [32m+[0m[0m primary_connection_string          = (sensitive value)
+      [32m+[0m[0m primary_dfs_endpoint               = (known after apply)
+      [32m+[0m[0m primary_dfs_host                   = (known after apply)
+      [32m+[0m[0m primary_dfs_internet_endpoint      = (known after apply)
+      [32m+[0m[0m primary_dfs_internet_host          = (known after apply)
+      [32m+[0m[0m primary_dfs_microsoft_endpoint     = (known after apply)
+      [32m+[0m[0m primary_dfs_microsoft_host         = (known after apply)
+      [32m+[0m[0m primary_file_endpoint              = (known after apply)
+      [32m+[0m[0m primary_file_host                  = (known after apply)
+      [32m+[0m[0m primary_file_internet_endpoint     = (known after apply)
+      [32m+[0m[0m primary_file_internet_host         = (known after apply)
+      [32m+[0m[0m primary_file_microsoft_endpoint    = (known after apply)
+      [32m+[0m[0m primary_file_microsoft_host        = (known after apply)
+      [32m+[0m[0m primary_location                   = (known after apply)
+      [32m+[0m[0m primary_queue_endpoint             = (known after apply)
+      [32m+[0m[0m primary_queue_host                 = (known after apply)
+      [32m+[0m[0m primary_queue_microsoft_endpoint   = (known after apply)
+      [32m+[0m[0m primary_queue_microsoft_host       = (known after apply)
+      [32m+[0m[0m primary_table_endpoint             = (known after apply)
+      [32m+[0m[0m primary_table_host                 = (known after apply)
+      [32m+[0m[0m primary_table_microsoft_endpoint   = (known after apply)
+      [32m+[0m[0m primary_table_microsoft_host       = (known after apply)
+      [32m+[0m[0m primary_web_endpoint               = (known after apply)
+      [32m+[0m[0m primary_web_host                   = (known after apply)
+      [32m+[0m[0m primary_web_internet_endpoint      = (known after apply)
+      [32m+[0m[0m primary_web_internet_host          = (known after apply)
+      [32m+[0m[0m primary_web_microsoft_endpoint     = (known after apply)
+      [32m+[0m[0m primary_web_microsoft_host         = (known after apply)
+      [32m+[0m[0m public_network_access_enabled      = true
+      [32m+[0m[0m queue_encryption_key_type          = "Service"
+      [32m+[0m[0m resource_group_name                = "rg-nordwerk-dev"
+      [32m+[0m[0m secondary_access_key               = (sensitive value)
+      [32m+[0m[0m secondary_blob_connection_string   = (sensitive value)
+      [32m+[0m[0m secondary_blob_endpoint            = (known after apply)
+      [32m+[0m[0m secondary_blob_host                = (known after apply)
+      [32m+[0m[0m secondary_blob_internet_endpoint   = (known after apply)
+      [32m+[0m[0m secondary_blob_internet_host       = (known after apply)
+      [32m+[0m[0m secondary_blob_microsoft_endpoint  = (known after apply)
+      [32m+[0m[0m secondary_blob_microsoft_host      = (known after apply)
+      [32m+[0m[0m secondary_connection_string        = (sensitive value)
+      [32m+[0m[0m secondary_dfs_endpoint             = (known after apply)
+      [32m+[0m[0m secondary_dfs_host                 = (known after apply)
+      [32m+[0m[0m secondary_dfs_internet_endpoint    = (known after apply)
+      [32m+[0m[0m secondary_dfs_internet_host        = (known after apply)
+      [32m+[0m[0m secondary_dfs_microsoft_endpoint   = (known after apply)
+      [32m+[0m[0m secondary_dfs_microsoft_host       = (known after apply)
+      [32m+[0m[0m secondary_file_endpoint            = (known after apply)
+      [32m+[0m[0m secondary_file_host                = (known after apply)
+      [32m+[0m[0m secondary_file_internet_endpoint   = (known after apply)
+      [32m+[0m[0m secondary_file_internet_host       = (known after apply)
+      [32m+[0m[0m secondary_file_microsoft_endpoint  = (known after apply)
+      [32m+[0m[0m secondary_file_microsoft_host      = (known after apply)
+      [32m+[0m[0m secondary_location                 = (known after apply)
+      [32m+[0m[0m secondary_queue_endpoint           = (known after apply)
+      [32m+[0m[0m secondary_queue_host               = (known after apply)
+      [32m+[0m[0m secondary_queue_microsoft_endpoint = (known after apply)
+      [32m+[0m[0m secondary_queue_microsoft_host     = (known after apply)
+      [32m+[0m[0m secondary_table_endpoint           = (known after apply)
+      [32m+[0m[0m secondary_table_host               = (known after apply)
+      [32m+[0m[0m secondary_table_microsoft_endpoint = (known after apply)
+      [32m+[0m[0m secondary_table_microsoft_host     = (known after apply)
+      [32m+[0m[0m secondary_web_endpoint             = (known after apply)
+      [32m+[0m[0m secondary_web_host                 = (known after apply)
+      [32m+[0m[0m secondary_web_internet_endpoint    = (known after apply)
+      [32m+[0m[0m secondary_web_internet_host        = (known after apply)
+      [32m+[0m[0m secondary_web_microsoft_endpoint   = (known after apply)
+      [32m+[0m[0m secondary_web_microsoft_host       = (known after apply)
+      [32m+[0m[0m sftp_enabled                       = false
+      [32m+[0m[0m shared_access_key_enabled          = true
+      [32m+[0m[0m table_encryption_key_type          = "Service"
+      [32m+[0m[0m tags                               = {
+          [32m+[0m[0m "course"      = "DLBSEPCP01"
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "managed_by"  = "terraform"
+          [32m+[0m[0m "project"     = "nordwerk"
+        }
+
+      [32m+[0m[0m blob_properties {
+          [32m+[0m[0m change_feed_enabled      = false
+          [32m+[0m[0m default_service_version  = (known after apply)
+          [32m+[0m[0m last_access_time_enabled = false
+          [32m+[0m[0m versioning_enabled       = true
+
+          [32m+[0m[0m container_delete_retention_policy {
+              [32m+[0m[0m days = 7
+            }
+
+          [32m+[0m[0m delete_retention_policy {
+              [32m+[0m[0m days                     = 7
+              [32m+[0m[0m permanent_delete_enabled = false
+            }
+        }
+
+      [32m+[0m[0m network_rules (known after apply)
+
+      [32m+[0m[0m queue_properties (known after apply)
+
+      [32m+[0m[0m routing (known after apply)
+
+      [32m+[0m[0m share_properties (known after apply)
+
+      [32m+[0m[0m static_website (known after apply)
+    }
+
+[1m  # module.static_site.azurerm_storage_account_static_website.this[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_storage_account_static_website" "this" {
+      [32m+[0m[0m error_404_document = "404.html"
+      [32m+[0m[0m id                 = (known after apply)
+      [32m+[0m[0m index_document     = "index.html"
+      [32m+[0m[0m storage_account_id = (known after apply)
+    }
+
+[1m  # module.static_site.azurerm_storage_blob.content["404.html"][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_storage_blob" "content" {
+      [32m+[0m[0m access_tier            = (known after apply)
+      [32m+[0m[0m content_md5            = "4de515d08c1d68de0accb7b4493d058d"
+      [32m+[0m[0m content_type           = "text/html"
+      [32m+[0m[0m id                     = (known after apply)
+      [32m+[0m[0m metadata               = (known after apply)
+      [32m+[0m[0m name                   = "404.html"
+      [32m+[0m[0m parallelism            = 8
+      [32m+[0m[0m size                   = 0
+      [32m+[0m[0m source                 = "./../website/404.html"
+      [32m+[0m[0m storage_account_name   = (known after apply)
+      [32m+[0m[0m storage_container_id   = (known after apply)
+      [32m+[0m[0m storage_container_name = "$web"
+      [32m+[0m[0m type                   = "Block"
+      [32m+[0m[0m url                    = (known after apply)
+    }
+
+[1m  # module.static_site.azurerm_storage_blob.content["index.html"][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_storage_blob" "content" {
+      [32m+[0m[0m access_tier            = (known after apply)
+      [32m+[0m[0m content_md5            = "a50fd400b6359c4a38d0a2262960eb3b"
+      [32m+[0m[0m content_type           = "text/html"
+      [32m+[0m[0m id                     = (known after apply)
+      [32m+[0m[0m metadata               = (known after apply)
+      [32m+[0m[0m name                   = "index.html"
+      [32m+[0m[0m parallelism            = 8
+      [32m+[0m[0m size                   = 0
+      [32m+[0m[0m source                 = "./../website/index.html"
+      [32m+[0m[0m storage_account_name   = (known after apply)
+      [32m+[0m[0m storage_container_id   = (known after apply)
+      [32m+[0m[0m storage_container_name = "$web"
+      [32m+[0m[0m type                   = "Block"
+      [32m+[0m[0m url                    = (known after apply)
+    }
+
+[1m  # module.static_site.azurerm_storage_blob.content["style.css"][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_storage_blob" "content" {
+      [32m+[0m[0m access_tier            = (known after apply)
+      [32m+[0m[0m content_md5            = "b82210c9ca196bb87b726b34edc7f04f"
+      [32m+[0m[0m content_type           = "text/css"
+      [32m+[0m[0m id                     = (known after apply)
+      [32m+[0m[0m metadata               = (known after apply)
+      [32m+[0m[0m name                   = "style.css"
+      [32m+[0m[0m parallelism            = 8
+      [32m+[0m[0m size                   = 0
+      [32m+[0m[0m source                 = "./../website/style.css"
+      [32m+[0m[0m storage_account_name   = (known after apply)
+      [32m+[0m[0m storage_container_id   = (known after apply)
+      [32m+[0m[0m storage_container_name = "$web"
+      [32m+[0m[0m type                   = "Block"
+      [32m+[0m[0m url                    = (known after apply)
+    }
+
+[1m  # module.static_site.azurerm_storage_management_policy.lifecycle[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_storage_management_policy" "lifecycle" {
+      [32m+[0m[0m id                 = (known after apply)
+      [32m+[0m[0m storage_account_id = (known after apply)
+
+      [32m+[0m[0m rule {
+          [32m+[0m[0m enabled = true
+          [32m+[0m[0m name    = "alte-versionen-entfernen"
+
+          [32m+[0m[0m actions {
+              [32m+[0m[0m version {
+                  [32m+[0m[0m change_tier_to_archive_after_days_since_creation               = -1
+                  [32m+[0m[0m change_tier_to_cool_after_days_since_creation                  = -1
+                  [32m+[0m[0m delete_after_days_since_creation                               = 30
+                  [32m+[0m[0m tier_to_archive_after_days_since_last_tier_change_greater_than = -1
+                  [32m+[0m[0m tier_to_cold_after_days_since_creation_greater_than            = -1
+                }
+            }
+
+          [32m+[0m[0m filters {
+              [32m+[0m[0m blob_types = [
+                  [32m+[0m[0m "blockBlob",
+                ]
+            }
+        }
+    }
+
+[1mPlan:[0m [0m12 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  [32m+[0m[0m log_analytics_workspace = (known after apply)
+  [32m+[0m[0m replication_type        = "ZRS"
+  [32m+[0m[0m resource_group_name     = "rg-nordwerk-dev"
+  [32m+[0m[0m storage_account_name    = (known after apply)
+  [32m+[0m[0m website_url             = (known after apply)
+[33mÔòÀ[0m[0m
+[33mÔöé[0m [0m[1m[33mWarning: [0m[0m[1mArgument is deprecated[0m
+[33mÔöé[0m [0m
+[33mÔöé[0m [0m[0m  with module.static_site.azurerm_storage_blob.content,
+[33mÔöé[0m [0m  on modules\static-site\main.tf line 86, in resource "azurerm_storage_blob" "content":
+[33mÔöé[0m [0m  86:   storage_container_name = [4m"$web"[0m[0m
+[33mÔöé[0m [0m
+[33mÔöé[0m [0m`storage_container_name` has been deprecated in favour of
+[33mÔöé[0m [0m`storage_container_id` and will be removed in v5.0 of the AzureRM Provider
+[33mÔòÁ[0m[0m
+[90m
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ[0m
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

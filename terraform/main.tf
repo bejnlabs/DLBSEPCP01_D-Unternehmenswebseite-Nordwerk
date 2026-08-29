@@ -10,20 +10,19 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.6"
     }
-    archive = {
-      source  = "hashicorp/archive"
-      version = "~> 2.4"
-    }
   }
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
-# Zufaelliges Suffix: Speicherkonto- und Funktionsnamen muessen weltweit
-# eindeutig sein. Ohne Suffix laeuft das Skript bei fremden Pruefenden
-# nicht durch.
+# Speicherkontonamen muessen weltweit eindeutig sein. Ohne Zufallssuffix
+# laeuft das Skript bei fremden Pruefenden nicht durch.
 resource "random_string" "suffix" {
   length  = 6
   special = false
@@ -45,6 +44,7 @@ resource "azurerm_resource_group" "main" {
   tags     = local.common_tags
 }
 
+# ---------- Ebene 1: Auslieferung ----------
 module "static_site" {
   source = "./modules/static-site"
 
@@ -54,29 +54,25 @@ module "static_site" {
   suffix              = random_string.suffix.result
   replication_type    = var.replication_type
   website_source_path = "${path.module}/../website"
-  tags                = local.common_tags
+
+  versioning_enabled      = var.versioning_enabled
+  retention_days          = var.retention_days
+  old_version_expiry_days = var.old_version_expiry_days
+
+  tags = local.common_tags
 }
 
-module "backend_api" {
-  source = "./modules/backend-api"
-  count  = var.deploy_backend ? 1 : 0
+# ---------- Ebene 2: Betriebsueberwachung ----------
+module "observability" {
+  source = "./modules/observability"
+  count  = var.deploy_observability ? 1 : 0
 
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   name_prefix         = var.project_name
   suffix              = random_string.suffix.result
-  function_source_dir = "${path.module}/../function"
-  tags                = local.common_tags
-}
+  storage_account_id  = module.static_site.storage_account_id
+  retention_days      = var.log_retention_days
 
-module "edge" {
-  source = "./modules/edge"
-  count  = var.deploy_edge ? 1 : 0
-
-  resource_group_name = azurerm_resource_group.main.name
-  name_prefix         = var.project_name
-  suffix              = random_string.suffix.result
-  origin_host_name    = module.static_site.primary_web_host
-  api_host_name       = var.deploy_backend ? module.backend_api[0].default_hostname : null
-  tags                = local.common_tags
+  tags = local.common_tags
 }
